@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat with yourself</title>
+ <meta charset="utf-8" />
+</head>
+<body>
+    <form>
+        <fieldset>
+           Message: <input type='text' id='txtmsg' /> 
+		   <input type='button' id='btnstart' value='Send message' onclick='sendMessage();' />
+        </fieldset>
+    </form>
+	<div id='messages'></div>
+</body>
+    <script>
+        
+        const bc=new window.BroadcastChannel('sample_channel');
+		const txt = document.querySelector('#txtmsg');
+		const messages = document.querySelector('#messages');
+        
+        function sendMessage(){
+			let msg = txt.value;
+            bc.postMessage(msg);
+            setMsg(msg);
+        }
+        
+        
+        bc.onmessage=(message)=>{
+            var para = document.createElement("P");             
+			var t = document.createTextNode("OtherTab: " + message.data);      
+			para.appendChild(t);
+			messages.appendChild(para);
+           
+        }
+
+        function setMsg(msg){
+			var para = document.createElement("P");             
+			var t = document.createTextNode("You: " + msg);      
+			para.appendChild(t);
+			messages.appendChild(para);
+        }
+        
+        </script>
+</html>
